@@ -13,7 +13,7 @@ object Main extends App {
 
 object Programm {
 
-  def playOneRound(you: Int, ai: Int): Free[Action, Score] = for {
+  private def playOneRound(you: Int, ai: Int): Free[Action, Score] = for {
     s1 ← askForShape
     s2 ← askAiForShape
     winner ← playRound(s1, s2)
@@ -23,14 +23,14 @@ object Programm {
     else Score(you, ai + 1)
   }
 
-  def loopIt(score: Score): Free[Action, Score] = for {
+  private def loopIt(score: Score): Free[Action, Score] = for {
     nextScore ← playOneRound(score.you, score.ai)
     agree ← askForNextRound
     result ← if (agree) loopIt(nextScore) else nextScore.pure[ActionFr]
   } yield result
 
-  def startGame: Free[Action, Unit] = for {
+  def startGame: Free[Action, Score] = for {
     result <- loopIt(Score(0, 0))
     _ ← endGame(result)
-  } yield ()
+  } yield result
 }
