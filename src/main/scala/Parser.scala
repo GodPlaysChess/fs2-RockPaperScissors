@@ -1,9 +1,12 @@
+import cats.data.Validated
+import Validated._
+
 object Parser {
-  def getShape(input: String): Shape = input match {
-    case x if x.toLowerCase.startsWith("r") ⇒ Rock
-    case x if x.toLowerCase.startsWith("s") ⇒ Scissors
-    case x if x.toLowerCase.startsWith("p") ⇒ Paper
-    case _ ⇒ Rock // actually return Option or validation , and reiterate until get the right one
+  def getShape(input: String): Validated[ParseError, Shape] = input match {
+    case x if x.toLowerCase.startsWith("r") ⇒ valid(Rock)
+    case x if x.toLowerCase.startsWith("s") ⇒ valid(Scissors)
+    case x if x.toLowerCase.startsWith("p") ⇒ valid(Paper)
+    case _ ⇒ invalid(WrongShape)
   }
 
   def yesNo(input: String): Boolean = input match {
@@ -12,3 +15,6 @@ object Parser {
   }
 
 }
+
+trait ParseError
+case object WrongShape extends ParseError

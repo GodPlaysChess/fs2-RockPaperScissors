@@ -9,6 +9,10 @@ object IOActions {
   def inShape: Task[Shape] =
     input
       .map(Parser.getShape)
+      .flatMap(
+        _.fold(
+          _ ⇒ {println("Incorrect shape. Please, select (R)ock, (P)aper or (S)cissors"); inShape},
+          s ⇒ Task.delay(s)))
       .map(shape ⇒ { println(shape); shape })
 
   def inYesNo: Task[Boolean] =

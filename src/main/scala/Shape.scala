@@ -16,7 +16,7 @@ object Rules {
 
 object Strategies {
 
-  def random: Shape = Vector(Rock, Scissors, Paper)(Random.nextInt(3))
+  val random: () ⇒ Shape = () ⇒ Vector(Rock, Scissors, Paper)(Random.nextInt(3))
 
 }
 

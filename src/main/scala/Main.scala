@@ -6,7 +6,7 @@ import fs2.interop.cats._
 object Main extends App {
 
   Programm.startGame
-    .foldMap(Compiler.ioCompiler)
+    .foldMap(Compiler.ioCompiler(Strategies.random))
     .unsafeAttemptRun()
 
 }
@@ -18,7 +18,8 @@ object Programm {
     s2 ← askAiForShape
     winner ← playRound(s1, s2)
   } yield {
-    if (winner == s1) Score(you + 1, ai)
+    if (s1 == s2) Score(you, ai)
+    else if (winner == s1) Score(you + 1, ai)
     else Score(you, ai + 1)
   }
 
